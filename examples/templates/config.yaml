@@ -1,0 +1,60 @@
+receivers:
+  prometheus/confluent:
+    config:
+      scrape_configs:
+      - job_name: 'confluent'
+        scrape_interval: 30s
+        scrape_timeout: 30s
+        honor_timestamps: true
+        static_configs:
+          - targets:
+            - api.telemetry.confluent.cloud
+        scheme: https
+        basic_auth:
+          username: ${confluent_metrics_api_key_id}
+          password: ${confluent_metrics_api_key_secret}
+        metrics_path: /v2/metrics/cloud/export
+        params:
+          "resource.kafka.id":
+            - ${confluent_kafka_cluster_id}
+  kafkametrics:
+    brokers:
+      - ${kafka_bootstrap_endpoint}
+    protocol_version: 2.0.0
+    scrapers:
+      - brokers
+      - topics
+      - consumers
+    auth:
+      sasl:
+        username: ${kafka_api_key_id}
+        password: ${kafka_api_key_secret}
+        mechanism: PLAIN
+      tls:
+        insecure_skip_verify: false
+    collection_interval: 30s
+
+exporters:
+  otlp/confluent:
+    endpoint: "api.honeycomb.io:443"
+    headers:
+      "x-honeycomb-team": ${honeycomb_api_key}
+      "x-honeycomb-dataset": ${confluent_metrics_dataset_name}
+  otlp/kafka:
+    endpoint: "api.honeycomb.io:443"
+    headers:
+      "x-honeycomb-team": ${honeycomb_api_key}
+      "x-honeycomb-dataset": ${kafka_metrics_dataset_name}
+  logging:
+    loglevel: debug
+
+service:
+  pipelines:
+    metrics/confluent:
+      receivers: [prometheus/confluent]
+      processors: []
+      exporters: [otlp/confluent]
+    metrics/kafka:
+      receivers: [kafkametrics]
+      processors: []
+      exporters: [otlp/kafka]

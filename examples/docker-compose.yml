@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  otelcol:
+    image: otel/opentelemetry-collector-contrib:0.81.0
+    command: [ "--config=/etc/otelcol-config.yml"]
+    volumes:
+      - "./config.yaml:/etc/otelcol-config.yml"
+    ports:
+      - "9464" # Prometheus exporter
+      - "8888" # Metrics endpoint
