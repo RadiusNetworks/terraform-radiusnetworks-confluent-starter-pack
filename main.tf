@@ -257,7 +257,6 @@ module "kafka_metrics_queries" {
 
 resource "honeycombio_board" "confluent_kafka" {
   name  = "Confluent Kafka Operations"
-  style = "visual"
   query {
     query_id            = module.kafka_metrics_queries.consumer_group_lag_query_id
     query_annotation_id = module.kafka_metrics_queries.consumer_group_lag_query_annotation_id
