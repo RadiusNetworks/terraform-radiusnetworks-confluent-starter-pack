@@ -41,7 +41,7 @@ resource "confluent_kafka_cluster" "main" {
 }
 
 resource "confluent_kafka_topic" "example" {
-  topic_name         = "examples"
+  topic_name = "examples"
 
   kafka_cluster {
     id = confluent_kafka_cluster.main.id
@@ -75,7 +75,7 @@ module "radiusnetworks_confluent_starter_pack" {
 locals {
   otel_collector_config = templatefile("./templates/config.yaml",
     {
-      honeycomb_api_key    = var.honeycomb_api_key
+      honeycomb_api_key = var.honeycomb_api_key
 
       # prometheus/confluent
       confluent_metrics_api_key_id     = confluent_api_key.monitoring.id

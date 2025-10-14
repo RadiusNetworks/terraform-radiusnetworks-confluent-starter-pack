@@ -21,5 +21,5 @@ Honeycomb API key
 
 $ export TF_VAR_honeycomb_api_key=<secret>
 EOF
-  default = ""
+  default     = ""
 }
