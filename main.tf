@@ -255,14 +255,22 @@ module "kafka_metrics_queries" {
 # Create Confluent Kafka Board
 ####################################################
 
-resource "honeycombio_board" "confluent_kafka" {
-  name  = "Confluent Kafka Operations"
-  query {
-    query_id            = module.kafka_metrics_queries.consumer_group_lag_query_id
-    query_annotation_id = module.kafka_metrics_queries.consumer_group_lag_query_annotation_id
+resource "honeycombio_flexible_board" "confluent_kafka" {
+  name = "Confluent Kafka Operations"
+
+  panel {
+    type = "query"
+    query_panel {
+      query_id            = module.kafka_metrics_queries.consumer_group_lag_query_id
+      query_annotation_id = module.kafka_metrics_queries.consumer_group_lag_query_annotation_id
+    }
   }
-  query {
-    query_id            = module.kafka_metrics_queries.consumer_group_lag_sum_query_id
-    query_annotation_id = module.kafka_metrics_queries.consumer_group_lag_sum_query_annotation_id
+
+  panel {
+    type = "query"
+    query_panel {
+      query_id            = module.kafka_metrics_queries.consumer_group_lag_sum_query_id
+      query_annotation_id = module.kafka_metrics_queries.consumer_group_lag_sum_query_annotation_id
+    }
   }
 }

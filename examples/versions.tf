@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     confluent = {
-      source = "confluentinc/confluent"
+      source  = "confluentinc/confluent"
       version = ">= 1.48.0"
     }
     honeycombio = {
